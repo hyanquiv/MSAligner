@@ -190,4 +190,3 @@ Para dudas, sugerencias o errores, abre un *issue* en el repositorio.
 ---
 
 **¡Gracias por usar el Alineador Múltiple de Secuencias!** 🧬✨
-	
