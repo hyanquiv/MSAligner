@@ -8,7 +8,16 @@
 #include <memory>
 
 /**
- * Estructura para representar un nodo en el árbol guía
+ * EnumeraciÃ³n para los pasos del alineamiento
+ */
+enum class AlignmentStep {
+    MATCH,
+    DELETE,
+    INSERT
+};
+
+/**
+ * Estructura para representar un nodo en el ï¿½rbol guï¿½a
  */
 struct TreeNode {
     int id;                                    // ID del nodo (-1 para nodos internos)
@@ -24,16 +33,16 @@ struct TreeNode {
  * Estructura para representar un perfil de alineamiento
  */
 struct Profile {
-    std::vector<std::vector<double>> frequencies; // Frecuencias de cada base/aminoácido por posición
-    std::vector<double> gap_frequencies;          // Frecuencias de gaps por posición
+    std::vector<std::vector<double>> frequencies; // Frecuencias de cada base/aminoï¿½cido por posiciï¿½n
+    std::vector<double> gap_frequencies;          // Frecuencias de gaps por posiciï¿½n
     int length;                                   // Longitud del perfil
-    int num_sequences;                            // Número de secuencias en el perfil
+    int num_sequences;                            // Nï¿½mero de secuencias en el perfil
     
     Profile() : length(0), num_sequences(0) {}
 };
 
 /**
- * Clase principal para el alineamiento múltiple de secuencias
+ * Clase principal para el alineamiento mï¿½ltiple de secuencias
  */
 class MSAAligner {
 public:
@@ -48,31 +57,31 @@ public:
     ~MSAAligner() = default;
     
     /**
-     * Realiza el alineamiento múltiple de secuencias
+     * Realiza el alineamiento mï¿½ltiple de secuencias
      * @param sequences Vector de secuencias no alineadas
      * @return Vector de secuencias alineadas
      */
     std::vector<Sequence> alignSequences(const std::vector<Sequence>& sequences);
     
     /**
-     * Obtiene estadísticas del último alineamiento
-     * @return Mapa con estadísticas (gaps, longitud final, etc.)
+     * Obtiene estadï¿½sticas del ï¿½ltimo alineamiento
+     * @return Mapa con estadï¿½sticas (gaps, longitud final, etc.)
      */
     std::map<std::string, int> getAlignmentStats() const;
     
     /**
-     * Imprime el árbol guía en consola
+     * Imprime el ï¿½rbol guï¿½a en consola
      */
     void printGuideTree() const;
 
 private:
-    // Matrices de puntuación y parámetros
+    // Matrices de puntuaciï¿½n y parï¿½metros
     int match_score;
     int mismatch_score;
     int gap_penalty;
     int gap_extension_penalty;
     
-    // Estadísticas del alineamiento
+    // Estadï¿½sticas del alineamiento
     int total_gaps;
     int final_length;
     std::shared_ptr<TreeNode> guide_tree;
@@ -88,23 +97,23 @@ private:
      * Calcula la distancia entre dos secuencias usando identidad porcentual
      * @param seq1 Primera secuencia
      * @param seq2 Segunda secuencia
-     * @return Distancia entre las secuencias (0.0 = idénticas, 1.0 = completamente diferentes)
+     * @return Distancia entre las secuencias (0.0 = idï¿½nticas, 1.0 = completamente diferentes)
      */
     double calculateSequenceDistance(const std::string& seq1, const std::string& seq2);
     
     /**
-     * Construye el árbol guía usando UPGMA
+     * Construye el ï¿½rbol guï¿½a usando UPGMA
      * @param sequences Vector de secuencias originales
      * @param distance_matrix Matriz de distancias
-     * @return Nodo raíz del árbol guía
+     * @return Nodo raï¿½z del ï¿½rbol guï¿½a
      */
     std::shared_ptr<TreeNode> buildGuideTree(const std::vector<Sequence>& sequences,
                                            const std::vector<std::vector<double>>& distance_matrix);
     
     /**
-     * Realiza el alineamiento progresivo siguiendo el árbol guía
+     * Realiza el alineamiento progresivo siguiendo el ï¿½rbol guï¿½a
      * @param sequences Secuencias originales
-     * @param node Nodo actual del árbol
+     * @param node Nodo actual del ï¿½rbol
      * @return Perfil del alineamiento en este nodo
      */
     Profile progressiveAlignment(const std::vector<Sequence>& sequences,
@@ -154,25 +163,87 @@ private:
     Profile createProfile(const std::string& sequence);
     
     /**
-     * Imprime un nodo del árbol recursivamente
+     * Imprime un nodo del ï¿½rbol recursivamente
      * @param node Nodo a imprimir
      * @param depth Profundidad actual
      */
     void printTreeNode(const std::shared_ptr<TreeNode>& node, int depth = 0) const;
     
     /**
-     * Encuentra el índice del carácter en el alfabeto
-     * @param c Carácter a buscar
-     * @return Índice en el alfabeto (0-3 para DNA, 0-19 para proteínas)
+     * Encuentra el ï¿½ndice del carï¿½cter en el alfabeto
+     * @param c Carï¿½cter a buscar
+     * @return ï¿½ndice en el alfabeto (0-3 para DNA, 0-19 para proteï¿½nas)
      */
     int getAlphabetIndex(char c) const;
     
     /**
-     * Obtiene el carácter del alfabeto por índice
-     * @param index Índice en el alfabeto
-     * @return Carácter correspondiente
+     * Obtiene el carï¿½cter del alfabeto por ï¿½ndice
+     * @param index ï¿½ndice en el alfabeto
+     * @return Carï¿½cter correspondiente
      */
     char getAlphabetChar(int index) const;
+    
+    /**
+     * Inicializa la matriz de programaciÃ³n dinÃ¡mica
+     */
+    std::vector<std::vector<int>> initializeDPMatrix(size_t m, size_t n);
+    
+    /**
+     * Llena la matriz de programaciÃ³n dinÃ¡mica
+     */
+    void fillDPMatrix(std::vector<std::vector<int>>& dp, 
+                     const std::string& seq1, const std::string& seq2,
+                     size_t m, size_t n);
+    
+    /**
+     * Calcula el puntaje de coincidencia entre dos caracteres
+     */
+    int calculateMatchScore(char c1, char c2);
+    
+    /**
+     * Reconstruye el alineamiento a partir de la matriz DP
+     */
+    std::pair<std::string, std::string> reconstructAlignment(
+        const std::vector<std::vector<int>>& dp,
+        const std::string& seq1, const std::string& seq2,
+        size_t m, size_t n);
+    
+    /**
+     * Determina el prÃ³ximo paso en la reconstrucciÃ³n del alineamiento
+     */
+    AlignmentStep determineAlignmentStep(
+        const std::vector<std::vector<int>>& dp,
+        const std::string& seq1, const std::string& seq2,
+        size_t i, size_t j);
+    
+    /**
+     * Verifica si el paso actual es una coincidencia/desajuste
+     */
+    bool isMatchStep(const std::vector<std::vector<int>>& dp,
+                    const std::string& seq1, const std::string& seq2,
+                    size_t i, size_t j);
+    
+    /**
+     * Verifica si el paso actual es una eliminaciÃ³n
+     */
+    bool isDeleteStep(const std::vector<std::vector<int>>& dp,
+                     size_t i, size_t j);
+    
+    std::string generateConsensusFromProfile(const Profile& profile);
+    char findBestCharacterAtPosition(const Profile& profile, int pos);
+    Profile initializeCombinedProfile(const std::pair<std::string, std::string>& aligned_pair, 
+                                    const Profile& profile);
+    void fillCombinedProfile(Profile& new_profile, 
+                           const std::pair<std::string, std::string>& aligned_pair,
+                           const Profile& original_profile,
+                           const std::string& sequence);
+    void addOriginalProfileFrequencies(Profile& new_profile, const Profile& original_profile,
+                                      char profile_char, int pos, const std::string& aligned_consensus);
+    int findOriginalPosition(const std::string& aligned_consensus, int aligned_pos);
+    void copyFrequenciesFromOriginal(Profile& new_profile, const Profile& original_profile,
+                                   int new_pos, int orig_pos);
+    void addNewSequenceFrequencies(Profile& new_profile, char seq_char, int pos);
+    void normalizeFrequenciesAtPosition(Profile& new_profile, int pos);
     
     // Constantes
     static const std::string DNA_ALPHABET;

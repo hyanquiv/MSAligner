@@ -361,3 +361,55 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ======================================
+# MSA Aligner - Custom Ignores
+# ======================================
+
+# Compiled executables
+alineador
+benchmark
+*.exe
+
+# Benchmark results and temp files
+benchmarks/results/
+temp_scalability_*.fasta
+synthetic_*.fasta
+
+# Output files from alignment runs
+resultado.fasta
+*_aligned_*.fasta
+aligned_*.fasta
+
+# Temporary files
+*.tmp
+temp_*.fasta
+
+# Python cache
+scripts/__pycache__/
+*.pyc
+*.pyo
+
+# Build directories
+build/
+cmake-build-*/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Core dumps
+core
+core.*
+
+# Memory profiling
+*.valgrind
+*.massif
+*.o

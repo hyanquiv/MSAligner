@@ -1,0 +1,1 @@
+REPORTE DE BENCHMARKS - MSA Aligner\n==================================================\n\nFecha: 2025-08-01 11:03:55\nTotal de benchmarks: 0\nExitosos: 0\nFallidos: 0\n\nBENCHMARKS EXITOSOS:\n--------------------\n
