@@ -4,19 +4,18 @@ Implementación en C++ de un alineador múltiple de secuencias que utiliza algor
 
 ## 🎯 Características
 
-- ✅ Lectura de archivos FASTA estándar
-- ✅ Algoritmo UPGMA para construcción del árbol guía
-- ✅ Alineamiento progresivo con programación dinámica
-- ✅ Soporte para secuencias de ADN y proteínas
-- ✅ Estadísticas detalladas del alineamiento
-- ✅ Interfaz de línea de comandos simple
-- ✅ Código modular y bien documentado
+- ✅ Lectura de archivos FASTA estándar  
+- ✅ Algoritmo UPGMA para construcción del árbol guía  
+- ✅ Alineamiento progresivo con programación dinámica  
+- ✅ Soporte para secuencias de ADN y proteínas  
+- ✅ Estadísticas detalladas del alineamiento  
+- ✅ Interfaz de línea de comandos simple  
+- ✅ Código modular y bien documentado  
 
 ## 🏗️ Estructura del Proyecto
 
 ```
 MSAAligner/
-├── CMakeLists.txt          # Configuración de compilación
 ├── README.md               # Este archivo
 ├── src/
 │   ├── main.cpp           # Programa principal
@@ -31,38 +30,53 @@ MSAAligner/
 
 ### Requisitos
 
-- CMake 3.10 o superior
-- Compilador C++17 compatible (GCC, Clang, MSVC)
-- Sistema operativo: Linux, macOS, Windows
+- **Visual Studio Community 2022** (Windows)  
+- Compilador C++17 compatible  
+- Sistema operativo compatible: **Windows (recomendado con MSVC)**, Linux, macOS  
+- CMake (recomendado para portabilidad entre plataformas)
 
 ### Pasos de compilación
 
+#### 🪟 En Windows con Visual Studio Community 2022 (MSVC)
+
+1. Abre la terminal "x64 Native Tools Command Prompt for VS 2022"
+2. Clona el repositorio y crea un directorio de compilación:
+
 ```bash
-# Clonar o descargar el proyecto
 git clone <repository_url>
 cd MSAAligner
-
-# Crear directorio de compilación
 mkdir build
 cd build
-
-# Configurar con CMake
-cmake ..
-
-# Compilar
-make
-
-# En Windows con Visual Studio:
-# cmake --build . --config Release
 ```
 
-### Compilación alternativa (sin CMake)
+3. Configura el proyecto con CMake:
 
 ```bash
-# Compilación directa con g++
-g++ -std=c++17 -O3 -Wall -Wextra \
-    src/main.cpp src/alignment.cpp src/io.cpp \
-    -o alineador
+cmake .. -G "Visual Studio 17 2022"
+```
+
+4. Compila el proyecto en modo Release:
+
+```bash
+cmake --build . --config Release
+```
+
+Esto generará el ejecutable `alineador.exe` en el subdirectorio `Release`.
+
+#### 🐧 En Linux/macOS con g++
+
+```bash
+# Compilación directa sin CMake (requiere g++)
+g++ -std=c++17 -O3 -Wall -Wextra     src/main.cpp src/alignment.cpp src/io.cpp     -o alineador
+```
+
+O bien con CMake:
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
 ```
 
 ## 🚀 Uso
@@ -76,13 +90,10 @@ g++ -std=c++17 -O3 -Wall -Wextra \
 ### Ejemplo
 
 ```bash
-# Alinear secuencias del archivo input.fasta
 ./alineador sequences.fasta aligned_sequences.fasta
 ```
 
 ### Formato de entrada
-
-El archivo de entrada debe ser un FASTA estándar con múltiples secuencias:
 
 ```fasta
 >Secuencia_1
@@ -95,8 +106,6 @@ ATCGATCGAACG
 
 ### Formato de salida
 
-El archivo de salida contendrá las secuencias alineadas con gaps (`-`):
-
 ```fasta
 >Secuencia_1
 ATCGATCGATCG
@@ -108,85 +117,37 @@ ATCGATCGAACG
 
 ## 🔬 Algoritmo
 
-El alineador implementa un algoritmo MSA progresivo en tres pasos:
+El alineador implementa un enfoque progresivo en tres pasos:
 
-### 1. Matriz de Distancias
-- Calcula distancias par a par entre todas las secuencias
-- Utiliza identidad porcentual como métrica
-- Complejidad: O(n² × L²) donde n = número de secuencias, L = longitud promedio
-
-### 2. Árbol Guía (UPGMA)
-- Construye un árbol filogenético usando UPGMA (Unweighted Pair Group Method with Arithmetic Mean)
-- Determina el orden óptimo de alineamiento
-- Complejidad: O(n³)
-
-### 3. Alineamiento Progresivo
-- Alinea secuencias siguiendo el árbol guía
-- Utiliza programación dinámica (Needleman-Wunsch)
-- Combina perfiles de secuencias gradualmente
-- Complejidad: O(n × L²)
+1. **Matriz de Distancias**  
+2. **Árbol Guía (UPGMA)**  
+3. **Alineamiento Progresivo (Needleman-Wunsch)**  
 
 ## 📊 Parámetros de Alineamiento
 
-| Parámetro | Valor | Descripción |
-|-----------|-------|-------------|
-| Match Score | +2 | Puntuación por coincidencia |
-| Mismatch Score | -1 | Penalización por no coincidencia |
-| Gap Penalty | -2 | Penalización por abrir gap |
-| Gap Extension | -1 | Penalización por extender gap |
+| Parámetro         | Valor | Descripción                         |
+|------------------|-------|-------------------------------------|
+| Match Score      | +2    | Puntuación por coincidencia         |
+| Mismatch Score   | -1    | Penalización por no coincidencia    |
+| Gap Penalty      | -2    | Penalización por abrir un gap       |
+| Gap Extension    | -1    | Penalización por extender un gap    |
 
 ## 📈 Estadísticas de Salida
 
-El programa proporciona información detallada:
-
-- ✅ Tiempo de ejecución total
-- ✅ Número de secuencias procesadas
-- ✅ Longitud final del alineamiento
-- ✅ Número total de gaps insertados
-- ✅ Porcentaje de gaps en el alineamiento
-- ✅ Visualización del árbol guía
+- Tiempo de ejecución total  
+- Número de secuencias procesadas  
+- Longitud del alineamiento  
+- Total de gaps insertados  
+- Porcentaje de gaps  
+- Representación del árbol guía  
 
 ## 🔧 Personalización
 
-### Modificar parámetros de puntuación
-
-Edita los valores en el constructor de `MSAAligner` (archivo `alignment.cpp`):
-
-```cpp
-MSAAligner::MSAAligner() 
-    : match_score(2),           // Cambiar aquí
-      mismatch_score(-1),       // Cambiar aquí
-      gap_penalty(-2),          // Cambiar aquí
-      gap_extension_penalty(-1) // Cambiar aquí
-```
-
-### Cambiar alfabeto de secuencias
-
-Modifica las constantes en `alignment.h`:
-
-```cpp
-const std::string DNA_ALPHABET = "ATCG";           // Para ADN
-const std::string PROTEIN_ALPHABET = "ARNDCQEGH..."; // Para proteínas
-```
+Puedes modificar parámetros de puntuación en `alignment.cpp`, y cambiar el alfabeto (ADN o proteínas) en `alignment.h`.
 
 ## 🧪 Casos de Prueba
 
-### Secuencias de ejemplo
-
-Crea un archivo `test.fasta`:
-
-```fasta
->seq1
-ATCGATCGATCG
->seq2
-ATCGAACGATCG
->seq3
-ATCGATCGAACG
->seq4
-ATCGAACGAACG
-```
-
-Ejecuta:
+Crea un archivo `test.fasta` con varias secuencias, luego ejecuta:
 
 ```bash
 ./alineador test.fasta result.fasta
@@ -194,39 +155,39 @@ Ejecuta:
 
 ## ⚠️ Limitaciones
 
-- **Complejidad computacional**: O(n³ + n×L²) - no óptimo para datasets muy grandes
-- **Memoria**: Almacena matrices completas en memoria
-- **Algoritmo simple**: Implementación básica, no incluye optimizaciones avanzadas
-- **Gap penalties**: Modelo lineal simple, no considera estructura secundaria
+- Alto costo computacional para muchos datos  
+- Uso de memoria elevado (sin optimizaciones avanzadas)  
+- Modelo de penalización lineal  
+- No considera estructura secundaria  
 
 ## 🔮 Mejoras Futuras
 
-- [ ] Algoritmo de alineamiento más sofisticado (T-Coffee, MUSCLE)
-- [ ] Soporte para perfiles HMM
-- [ ] Paralelización con OpenMP
-- [ ] Interfaz gráfica
-- [ ] Formato de salida en otros formatos (Clustal, Phylip)
-- [ ] Análisis de calidad del alineamiento
-- [ ] Soporte para secuencias muy largas (streaming)
+- [ ] Integración de algoritmos más avanzados (T-Coffee, MUSCLE)  
+- [ ] Soporte para modelos HMM  
+- [ ] Paralelización con OpenMP  
+- [ ] Interfaz gráfica  
+- [ ] Exportación en múltiples formatos (Clustal, Phylip)  
+- [ ] Alineamiento en streaming para secuencias largas  
 
 ## 📝 Licencia
 
-Este proyecto está bajo licencia MIT. Ver archivo LICENSE para más detalles.
+Este proyecto está bajo licencia MIT. Ver archivo LICENSE.
 
 ## 🤝 Contribuciones
 
 Las contribuciones son bienvenidas. Por favor:
 
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork del repositorio  
+2. Crea una rama (`feature/NuevaFuncion`)  
+3. Haz commit (`git commit -m 'Agrega nueva función'`)  
+4. Push a tu rama  
+5. Abre un Pull Request  
 
 ## 📞 Contacto
 
-Para preguntas, sugerencias o reportar bugs, abre un issue en el repositorio.
+Para dudas, sugerencias o errores, abre un *issue* en el repositorio.
 
 ---
 
 **¡Gracias por usar el Alineador Múltiple de Secuencias!** 🧬✨
+	
