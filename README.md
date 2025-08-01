@@ -183,6 +183,44 @@ Las contribuciones son bienvenidas. Por favor:
 4. Push a tu rama  
 5. Abre un Pull Request  
 
+## 📊 Evaluación y Benchmarking
+
+### Sistema de Benchmarking Integrado
+
+El proyecto incluye un framework completo de evaluación:
+
+```bash
+# Compilar sistema de benchmarks
+g++ -std=c++17 -O3 -Wall -Wextra src/benchmark_main.cpp src/benchmark.cpp src/alignment.cpp src/io.cpp -o benchmark
+
+# Ejecutar benchmarks individuales
+./benchmark single dataset.fasta
+./benchmark scalability base.fasta 100 10
+./benchmark synthetic 25 200 0.05 output.fasta
+
+# Script automatizado Python
+python3 scripts/run_benchmarks.py --all
+python3 scripts/run_benchmarks.py --category small
+```
+
+### Casos de Uso Evaluados
+
+| Tipo | Descripción | Rendimiento |
+|------|-------------|-------------|
+| **ADN Conservado** | Genes ortólogos entre especies | ✅ Excelente |
+| **ADN Divergente** | Familias génicas con variación | ✅ Muy bueno |
+| **Proteínas** | Enzimas y proteínas funcionales | ✅ Óptimo |
+| **Escalabilidad** | 10-10,000 secuencias | ⚠️ Límite ~1000 |
+
+### Métricas de Rendimiento
+
+- **Datasets pequeños** (<100 seqs): <0.1s
+- **Datasets medianos** (100-1000 seqs): 0.5-5s  
+- **Uso de memoria**: 1-20 MB (escala con dataset)
+- **Calidad**: 1-30% gaps (dependiente de similitud)
+
+📋 **Ver análisis completo**: [EVALUACION_Y_RESULTADOS.md](EVALUACION_Y_RESULTADOS.md)
+
 ## 📞 Contacto
 
 Para dudas, sugerencias o errores, abre un *issue* en el repositorio.
