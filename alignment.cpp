@@ -20,49 +20,49 @@ std::vector<Sequence> MSAAligner::alignSequences(const std::vector<Sequence>& se
         std::cerr << "Error: Se necesitan al menos 2 secuencias para el alineamiento." << std::endl;
         return sequences;
     }
-    
-    std::cout << "\n🧬 Iniciando alineamiento múltiple de secuencias..." << std::endl;
-    std::cout << "📊 Número de secuencias: " << sequences.size() << std::endl;
-    
-    // Reiniciar estadísticas
+
+    std::cout << "\nIniciando alineamiento multiple de secuencias..." << std::endl;
+    std::cout << "Numero de secuencias: " << sequences.size() << std::endl;
+
+    // Reiniciar estadisticas
     total_gaps = 0;
     final_length = 0;
-    
+
     // Paso 1: Calcular matriz de distancias
-    std::cout << "🔍 Calculando matriz de distancias..." << std::endl;
+    std::cout << "Calculando matriz de distancias..." << std::endl;
     auto distance_matrix = calculateDistanceMatrix(sequences);
-    
-    // Paso 2: Construir árbol guía
-    std::cout << "🌳 Construyendo árbol guía con UPGMA..." << std::endl;
+
+    // Paso 2: Construir arbol guia
+    std::cout << "Construyendo arbol guia con UPGMA..." << std::endl;
     guide_tree = buildGuideTree(sequences, distance_matrix);
-    
+
     // Paso 3: Alineamiento progresivo
-    std::cout << "⚡ Realizando alineamiento progresivo..." << std::endl;
+    std::cout << "Realizando alineamiento progresivo..." << std::endl;
     Profile final_profile = progressiveAlignment(sequences, guide_tree);
-    
+
     // Paso 4: Convertir perfil a secuencias
-    std::cout << "📝 Generando secuencias alineadas..." << std::endl;
+    std::cout << "Generando secuencias alineadas..." << std::endl;
     std::vector<int> sequence_order;
     for (int i = 0; i < static_cast<int>(sequences.size()); ++i) {
         sequence_order.push_back(i);
     }
-    
+
     auto aligned_sequences = profileToSequences(final_profile, sequences, sequence_order);
-    
-    // Actualizar estadísticas
+
+    // Actualizar estadisticas
     if (!aligned_sequences.empty()) {
         final_length = aligned_sequences[0].sequence.length();
-        
+
         // Contar gaps totales
         for (const auto& seq : aligned_sequences) {
             total_gaps += std::count(seq.sequence.begin(), seq.sequence.end(), '-');
         }
     }
-    
-    std::cout << "✅ Alineamiento completado!" << std::endl;
-    std::cout << "📏 Longitud final: " << final_length << std::endl;
-    std::cout << "🕳️  Gaps totales insertados: " << total_gaps << std::endl;
-    
+
+    std::cout << "Alineamiento completado!" << std::endl;
+    std::cout << "Longitud final: " << final_length << std::endl;
+    std::cout << "Gaps totales insertados: " << total_gaps << std::endl;
+
     return aligned_sequences;
 }
 
@@ -453,11 +453,11 @@ std::map<std::string, int> MSAAligner::getAlignmentStats() const {
 
 void MSAAligner::printGuideTree() const {
     if (!guide_tree) {
-        std::cout << "No hay árbol guía disponible." << std::endl;
+        std::cout << "No hay arbol guia disponible." << std::endl;
         return;
     }
-    
-    std::cout << "\n🌳 Árbol Guía (UPGMA):" << std::endl;
+
+    std::cout << "\nArbol Guia (UPGMA):" << std::endl;
     printTreeNode(guide_tree, 0);
     std::cout << std::endl;
 }
